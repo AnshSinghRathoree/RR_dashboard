@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SupeRR Selector S2 | Rajasthan Royals IPL 2027 Auction War-Room Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #090D16; color: #F1F5F9; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .rr-gradient { background: linear-gradient(135deg, #1E1B4B 0%, #311042 55%, #9D174D 100%); }
+    .card-dark { background: #111827; border: 1px solid #1F2937; }
+    .card-dark:hover { border-color: #374151; }
+    .tab-active { background: #E11D48; color: white; border-color: #E11D48; }
+    .tab-inactive { background: #111827; color: #94A3B8; border-color: #1F2937; }
+    .tab-inactive:hover { color: #F8FAFC; border-color: #4B5563; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #090D16; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top War-Room Banner -->
+  <header class="rr-gradient border-b border-pink-500/30 shadow-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div>
+        <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-pink-500/20 border border-pink-400/40 text-pink-200 text-xs font-semibold tracking-wider uppercase mb-2">
+          <span>Rajasthan Royals • SupeRR Selector Season 2 • Round 1</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+          IPL 2027 Auction Clutch Scouting War-Room
+        </h1>
+        <p class="text-sm text-pink-100/85 mt-1">
+          Delivery-Level Pressure Index (PI) &amp; Phase-Normalized Empirical Bayes Model across 200,999 Deliveries (2022–2026)
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2.5 text-xs">
+        <a href="https://www.linkedin.com/in/ansh-singh-rathore-125829304" target="_blank" rel="noopener"
+           class="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold transition">
+          Ansh Singh Rathore • LinkedIn ↗
+        </a>
+        <a href="mailto:sansh8690@gmail.com"
+           class="px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-500 text-white font-semibold transition">
+          sansh8690@gmail.com
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 py-6 flex-1 space-y-6">
+
+    <!-- KPI Strip -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="card-dark rounded-xl p-4 border-t-2 border-t-pink-500">
+        <div class="text-xs text-slate-400 uppercase font-semibold tracking-wider">Dataset Scale</div>
+        <div class="text-2xl font-extrabold text-white mono mt-1">200,999</div>
+        <div class="text-xs text-slate-400 mt-1">Deliveries • 867 Matches (IPL &amp; T20I)</div>
+      </div>
+      <div class="card-dark rounded-xl p-4 border-t-2 border-t-blue-500">
+        <div class="text-xs text-slate-400 uppercase font-semibold tracking-wider">High-Pressure Cutoff</div>
+        <div class="text-2xl font-extrabold text-blue-400 mono mt-1">PI ≥ 0.364</div>
+        <div class="text-xs text-slate-400 mt-1">Top 25% Leverage Deliveries</div>
+      </div>
+      <div class="card-dark rounded-xl p-4 border-t-2 border-t-pink-500">
+        <div class="text-xs text-slate-400 uppercase font-semibold tracking-wider">RR Pre-Release Purse</div>
+        <div class="text-2xl font-extrabold text-pink-400 mono mt-1">₹7.65 Cr</div>
+        <div class="text-xs text-slate-400 mt-1">₹130 Cr Purse • 25/8 Squad (0 Open Slots)</div>
+      </div>
+      <div class="card-dark rounded-xl p-4 border-t-2 border-t-emerald-500">
+        <div class="text-xs text-slate-400 uppercase font-semibold tracking-wider">Obtainable Target Pool</div>
+        <div class="text-2xl font-extrabold text-emerald-400 mono mt-1">33 / 74</div>
+        <div class="text-xs text-slate-400 mt-1">Batters / Bowlers after Roster Filter</div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <nav class="flex flex-wrap gap-2 border-b border-slate-800 pb-3">
+      <button onclick="switchTab('rankings')" id="tab-rankings" class="tab-active px-4 py-2 rounded-lg text-sm font-semibold border transition cursor-pointer">
+        1. Top 10 Rankings &amp; Full Explorer
+      </button>
+      <button onclick="switchTab('visuals')" id="tab-visuals" class="tab-inactive px-4 py-2 rounded-lg text-sm font-semibold border transition cursor-pointer">
+        2. Clutch Quadrant &amp; PI Analytics
+      </button>
+      <button onclick="switchTab('simulator')" id="tab-simulator" class="tab-inactive px-4 py-2 rounded-lg text-sm font-semibold border transition cursor-pointer">
+        3. RR Mini-Auction Purse &amp; Slot Simulator
+      </button>
+      <button onclick="switchTab('methodology')" id="tab-methodology" class="tab-inactive px-4 py-2 rounded-lg text-sm font-semibold border transition cursor-pointer">
+        4. Methodology &amp; Glossary
+      </button>
+    </nav>
+
+    <!-- TAB 1: RANKINGS & EXPLORER -->
+    <section id="view-rankings" class="space-y-5">
+      <!-- Controls Bar -->
+      <div class="card-dark rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-semibold uppercase text-slate-400 mr-1">Discipline:</span>
+          <button onclick="setDiscipline('batters')" id="btn-bat" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-pink-600 text-white cursor-pointer">
+            Batters
+          </button>
+          <button onclick="setDiscipline('bowlers')" id="btn-bowl" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer">
+            Bowlers
+          </button>
+
+          <span class="text-xs font-semibold uppercase text-slate-400 ml-3 mr-1">Pool Filter:</span>
+          <select id="poolFilter" onchange="renderTable()" class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-1.5 focus:outline-none focus:border-pink-500">
+            <option value="obtainable">Obtainable RR Auction Targets (Default Top 10)</option>
+            <option value="all">All Qualified Players (Unfiltered Statistical Pool)</option>
+          </select>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex items-center gap-2">
+            <label for="minIplSlider" class="text-xs text-slate-400">Min IPL Share:</label>
+            <input type="range" id="minIplSlider" min="0" max="80" step="10" value="0" oninput="document.getElementById('minIplVal').innerText=this.value+'%'; renderTable();" class="w-24 accent-pink-500 cursor-pointer" />
+            <span id="minIplVal" class="text-xs mono text-pink-400 font-bold w-8">0%</span>
+          </div>
+          <input type="text" id="searchBox" oninput="renderTable()" placeholder="Search player or team..."
+                 class="bg-slate-900 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-1.5 w-48 focus:outline-none focus:border-pink-500" />
+        </div>
+      </div>
+
+      <!-- Data Table -->
+      <div class="card-dark rounded-xl overflow-hidden">
+        <div class="px-4 py-3 bg-slate-900/80 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+          <div id="tableTitle" class="text-sm font-bold text-white">Top 10 Obtainable Batters Under Pressure (Matches Unstop Dropdowns)</div>
+          <div id="tableCount" class="text-xs text-slate-400 mono">Showing 10 players</div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead id="tableHead" class="bg-slate-900 text-slate-300 text-[11px] uppercase tracking-wider border-b border-slate-800">
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-slate-800/80 text-xs">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: VISUAL ANALYTICS -->
+    <section id="view-visuals" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card-dark rounded-xl p-4">
+          <h3 class="text-sm font-bold text-white mb-1">Batters: Pressure Dominance (RAPP) vs. Baseline Elevation (ΔRAPP)</h3>
+          <p class="text-xs text-slate-400 mb-3">Top-right quadrant highlights batters who both beat phase-par under pressure and accelerate above their own baseline.</p>
+          <div class="h-80">
+            <canvas id="batScatterChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card-dark rounded-xl p-4">
+          <h3 class="text-sm font-bold text-white mb-1">Bowlers: Run Containment (RSPP) vs. Strike Threat (Wkts/Spell)</h3>
+          <p class="text-xs text-slate-400 mb-3">Top-right quadrant isolates bowlers who choke run flow below phase-par while taking wickets under pressure.</p>
+          <div class="h-80">
+            <canvas id="bowlScatterChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-dark rounded-xl p-4">
+        <h3 class="text-sm font-bold text-white mb-1">Delivery-Level Pressure Index (PI) Distribution Across 200,999 Balls</h3>
+        <p class="text-xs text-slate-400 mb-3">Innings 2 chases exhibit a pronounced high-pressure tail (29.9% of balls ≥ 0.364 PI) compared to Innings 1 target-setting (20.5%).</p>
+        <div class="h-64">
+          <canvas id="piHistChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: AUCTION PURSE & OVERSEAS SLOT SIMULATOR -->
+    <section id="view-simulator" class="hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Controls -->
+        <div class="card-dark rounded-xl p-5 space-y-4">
+          <h3 class="text-base font-bold text-white border-b border-slate-800 pb-2">RR Pre-Auction Roster &amp; Purse Controls</h3>
+          <p class="text-xs text-slate-400">
+            As of Nov 16, 2026 (pre-retention deadline), RR holds a <strong>₹7.65 Cr baseline purse</strong> with a full <strong>25/25 squad (8/8 overseas, 0 open slots)</strong>. Toggle probable releases/swaps to simulate auction capacity:
+          </p>
+
+          <div class="space-y-2.5 text-xs">
+            <label class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
+              <div>
+                <div class="font-semibold text-white">Release Adam Milne (Overseas)</div>
+                <div class="text-slate-400 text-[11px]">Predicted release • Frees +1 Overseas Slot &amp; +₹2.00 Cr</div>
+              </div>
+              <input type="checkbox" id="rel-milne" checked onchange="updateSim()" class="w-4 h-4 accent-pink-500" />
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
+              <div>
+                <div class="font-semibold text-white">Release Uncapped Domestic Bench (4 Players)</div>
+                <div class="text-slate-400 text-[11px]">Kuldeep Sen, V. Puthur, Y. Charak, B. Sharma • +4 Indian Slots &amp; +₹2.40 Cr</div>
+              </div>
+              <input type="checkbox" id="rel-dom" checked onchange="updateSim()" class="w-4 h-4 accent-pink-500" />
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
+              <div>
+                <div class="font-semibold text-white">Release / Trade Sam Curran (Overseas)</div>
+                <div class="text-slate-400 text-[11px]">Rumored swap scenario • Frees +1 Overseas Slot &amp; +₹6.50 Cr</div>
+              </div>
+              <input type="checkbox" id="rel-curran" onchange="updateSim()" class="w-4 h-4 accent-pink-500" />
+            </label>
+
+            <label class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800 cursor-pointer">
+              <div>
+                <div class="font-semibold text-white">Release Shimron Hetmyer (Overseas)</div>
+                <div class="text-slate-400 text-[11px]">High-purse finisher reset • Frees +1 Overseas Slot &amp; +₹11.00 Cr</div>
+              </div>
+              <input type="checkbox" id="rel-hetmyer" onchange="updateSim()" class="w-4 h-4 accent-pink-500" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Right Output -->
+        <div class="lg:col-span-2 card-dark rounded-xl p-5 space-y-4">
+          <h3 class="text-base font-bold text-white border-b border-slate-800 pb-2">Simulated Mini-Auction Buying Power &amp; Recommended Bids</h3>
+          <div class="grid grid-cols-3 gap-3">
+            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-[11px] text-slate-400 uppercase">Available Purse</div>
+              <div id="sim-purse" class="text-xl font-extrabold text-emerald-400 mono mt-0.5">₹12.05 Cr</div>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-[11px] text-slate-400 uppercase">Open Overseas Slots</div>
+              <div id="sim-os" class="text-xl font-extrabold text-pink-400 mono mt-0.5">1 Slot</div>
+            </div>
+            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800">
+              <div class="text-[11px] text-slate-400 uppercase">Total Open Squad Slots</div>
+              <div id="sim-tot" class="text-xl font-extrabold text-blue-400 mono mt-0.5">5 Slots</div>
+            </div>
+          </div>
+
+          <div id="sim-strategy" class="p-4 rounded-xl bg-pink-950/25 border border-pink-500/30 text-xs text-slate-200 space-y-2 leading-relaxed">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: METHODOLOGY & GLOSSARY -->
+    <section id="view-methodology" class="hidden space-y-5">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="card-dark rounded-xl p-5 space-y-3">
+          <h3 class="text-base font-bold text-pink-400">1. How Pressure Is Measured (PI ∈ [0, 1])</h3>
+          <p class="text-xs text-slate-300 leading-relaxed">
+            Every delivery is assigned a continuous Pressure Index before the ball is bowled, adjusting for rain-revised targets and Super Overs (fixed at 1.00):
+          </p>
+          <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4">
+            <li><strong>Innings 2 (Chasing):</strong> 40% Required Run Rate vs. competition par + 26% non-linear wicket depletion + 24% competitive endgame compression + 10% recent wicket shock (discounted ×0.78 in hopeless blowouts).</li>
+            <li><strong>Innings 1 (Setting Target):</strong> 36% death-over leverage (overs 15–20) + 34% early collapse recovery + 18% below-par scoring deficit + 12% recent wicket shock.</li>
+            <li><strong>High-Pressure Regime:</strong> Top quartile (<strong>PI ≥ 0.3644</strong>); remaining 75% forms each player's normal baseline.</li>
+          </ul>
+        </div>
+
+        <div class="card-dark rounded-xl p-5 space-y-3">
+          <h3 class="text-base font-bold text-blue-400">2. Plain-English Glossary of Metrics</h3>
+          <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4">
+            <li><strong>RAPP (Runs Above Phase-Par / 100 balls):</strong> Extra runs a batter scores per 100 balls compared to the average batter in that exact tournament, innings, and match phase.</li>
+            <li><strong>ΔRAPP (Clutch Elevation):</strong> High-Pressure RAPP minus Normal-Pressure RAPP. Positive values prove the batter accelerates when pressure spikes.</li>
+            <li><strong>RSPP &amp; ΔRSPP (Bowlers):</strong> Runs saved per over compared to the exact phase average under pressure, and the improvement over their own normal baseline.</li>
+            <li><strong>Empirical Bayes Shrinkage:</strong> Pulls small-sample hot streaks toward the peer average (priors: k=180 balls batters, k=200 balls bowlers) so sustained reliability wins.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="border-t border-slate-800/80 py-4 px-6 text-center text-xs text-slate-500">
+    Built by <strong class="text-slate-300">Ansh Singh Rathore</strong> • SupeRR Selector Season 2 (Round 1) •
+    <a href="https://www.linkedin.com/in/ansh-singh-rathore-125829304" target="_blank" class="text-pink-400 hover:underline">LinkedIn</a> •
+    <a href="mailto:sansh8690@gmail.com" class="text-pink-400 hover:underline">sansh8690@gmail.com</a>
+  </footer>
+
+<script>
+const DATA = {"meta": {"totalDeliveries": 200999, "totalMatches": 867, "piThreshold": 0.3644, "rrBasePurseCr": 7.65, "auctionPurseCr": 130.0, "salaryCapCr": 157.0}, "piHistogram": {"labels": ["0.00-0.05", "0.05-0.10", "0.10-0.15", "0.15-0.20", "0.20-0.25", "0.25-0.30", "0.30-0.35", "0.35-0.40", "0.40-0.45", "0.45-0.50", "0.50-0.55", "0.55-0.60", "0.60-0.65", "0.65-0.70", "0.70-0.75", "0.75-0.80", "0.80-0.85", "0.85-0.90", "0.90-0.95", "0.95-1.00"], "inn1": [19407, 16847, 11624, 10737, 8764, 8033, 6977, 5758, 4483, 3513, 2700, 2001, 1428, 1105, 818, 762, 491, 210, 62, 7], "inn2": [7126, 11824, 12832, 11593, 9055, 7161, 5663, 4636, 4073, 3842, 3795, 4397, 3264, 2252, 1695, 1238, 617, 155, 16, 0]}, "batters": [{"name": "Jos Buttler", "team2026": "Gujarat Titans", "status": "Franchise Lock / Traded", "raw_balls_hp": 161, "ipl_share": 73.9, "sr_norm": 152.7, "sr_hp": 189.3, "rapp_hp": 17.5, "delta_rapp": 17.4, "bound_pct_hp": 26.8, "bpd_hp": 16.2, "hp_consistency": 90.9, "clutch_index": 63.81, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Mark Chapman", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 159, "ipl_share": 0.0, "sr_norm": 136.9, "sr_hp": 180.6, "rapp_hp": 20.9, "delta_rapp": 22.1, "bound_pct_hp": 24.9, "bpd_hp": 19.4, "hp_consistency": 50.0, "clutch_index": 62.7, "note": "LHB middle-order hitter (0% IPL HP balls; 159 T20I HP balls). Scores at 180.6 SR under pressure (+33.7 \u0394RAPP) and is uncontracted in IPL 2026, though lack of IPL exposure is a caveat."}, {"name": "Naman Dhir", "team2026": "Mumbai Indians", "status": "Franchise Lock / Traded", "raw_balls_hp": 182, "ipl_share": 73.1, "sr_norm": 156.1, "sr_hp": 196.3, "rapp_hp": 13.1, "delta_rapp": 14.6, "bound_pct_hp": 28.8, "bpd_hp": 14.1, "hp_consistency": 56.2, "clutch_index": 60.32, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Suryakumar Yadav", "team2026": "Mumbai Indians", "status": "Franchise Lock / Traded", "raw_balls_hp": 421, "ipl_share": 71.0, "sr_norm": 162.7, "sr_hp": 182.8, "rapp_hp": 7.0, "delta_rapp": 6.5, "bound_pct_hp": 29.1, "bpd_hp": 17.4, "hp_consistency": 48.1, "clutch_index": 58.1, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "David Miller", "team2026": "Delhi Capitals", "status": "Obtainable Target", "raw_balls_hp": 566, "ipl_share": 61.7, "sr_norm": 130.6, "sr_hp": 172.3, "rapp_hp": 2.3, "delta_rapp": 6.4, "bound_pct_hp": 22.8, "bpd_hp": 21.0, "hp_consistency": 54.1, "clutch_index": 57.23, "note": "LHB finisher (61.7% IPL HP balls). Strike rate jumps +41.7 pts under pressure (130.6 to 172.3) across 566 HP balls, adding +40.2 \u0394RAPP\u2014provides the proven left-handed closer RR lacks behind Hetmyer and Ferreira."}, {"name": "Sikandar Raza", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 301, "ipl_share": 20.6, "sr_norm": 125.8, "sr_hp": 157.6, "rapp_hp": 6.4, "delta_rapp": 6.7, "bound_pct_hp": 19.2, "bpd_hp": 15.8, "hp_consistency": 63.2, "clutch_index": 56.83, "note": "Spin-bowling all-rounder (20.6% IPL HP balls). Posts the highest innings consistency in the top 10 (63.2% across 301 HP balls) with a 157.6 HP SR and off-spin matchups."}, {"name": "Jimmy Neesham", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 195, "ipl_share": 7.7, "sr_norm": 121.4, "sr_hp": 148.9, "rapp_hp": 5.3, "delta_rapp": 17.0, "bound_pct_hp": 19.2, "bpd_hp": 12.8, "hp_consistency": 57.1, "clutch_index": 56.09, "note": "Seam all-rounder (7.7% IPL HP balls). Lifts output by +29.7 \u0394RAPP under pressure (148.9 HP SR across 195 HP balls), offering budget lower-order hitting."}, {"name": "Marcus Stoinis", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_balls_hp": 366, "ipl_share": 79.5, "sr_norm": 146.5, "sr_hp": 172.1, "rapp_hp": 4.5, "delta_rapp": 5.1, "bound_pct_hp": 24.1, "bpd_hp": 14.2, "hp_consistency": 56.5, "clutch_index": 55.7, "note": "Seam-bowling all-rounder (79.5% IPL HP balls). Strikes at 172.1 under pressure (+21.1 \u0394RAPP across 366 HP balls); direct fit if Sam Curran leaves in a swap."}, {"name": "Towhid Hridoy", "team2026": "Uncontracted / Intl", "status": "Availability Risk (BAN)", "raw_balls_hp": 215, "ipl_share": 0.0, "sr_norm": 119.6, "sr_hp": 148.1, "rapp_hp": 6.6, "delta_rapp": 8.6, "bound_pct_hp": 18.8, "bpd_hp": 25.4, "hp_consistency": 50.0, "clutch_index": 55.62, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Namboori Tilak Varma", "team2026": "Mumbai Indians", "status": "Franchise Lock / Traded", "raw_balls_hp": 607, "ipl_share": 63.1, "sr_norm": 135.5, "sr_hp": 167.5, "rapp_hp": 1.7, "delta_rapp": 2.5, "bound_pct_hp": 21.6, "bpd_hp": 22.7, "hp_consistency": 52.8, "clutch_index": 54.84, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Shashank Singh", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_balls_hp": 318, "ipl_share": 100.0, "sr_norm": 151.7, "sr_hp": 169.2, "rapp_hp": 1.0, "delta_rapp": 5.2, "bound_pct_hp": 22.3, "bpd_hp": 24.5, "hp_consistency": 50.0, "clutch_index": 54.81, "note": "Indian finisher (100% IPL HP balls). Requires zero overseas slots, averages 24.5 balls per dismissal under pressure (169.2 HP SR), and prevents middle-order collapses."}, {"name": "Matthew Wade", "team2026": "Uncontracted / Intl", "status": "Retired / Inactive", "raw_balls_hp": 193, "ipl_share": 0.5, "sr_norm": 116.4, "sr_hp": 165.0, "rapp_hp": -2.4, "delta_rapp": 5.8, "bound_pct_hp": 21.3, "bpd_hp": 31.3, "hp_consistency": 30.8, "clutch_index": 54.77, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Nicholas Pooran", "team2026": "Lucknow Super Giants", "status": "Franchise Lock / Traded", "raw_balls_hp": 430, "ipl_share": 77.0, "sr_norm": 154.5, "sr_hp": 170.0, "rapp_hp": 3.4, "delta_rapp": 3.2, "bound_pct_hp": 24.1, "bpd_hp": 16.7, "hp_consistency": 51.9, "clutch_index": 54.68, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Iftikhar Ahmed", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_balls_hp": 174, "ipl_share": 0.0, "sr_norm": 114.6, "sr_hp": 154.0, "rapp_hp": 4.9, "delta_rapp": 14.0, "bound_pct_hp": 20.1, "bpd_hp": 14.3, "hp_consistency": 50.0, "clutch_index": 54.25, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Tim David", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_balls_hp": 505, "ipl_share": 68.7, "sr_norm": 174.1, "sr_hp": 182.2, "rapp_hp": 2.4, "delta_rapp": 0.4, "bound_pct_hp": 25.8, "bpd_hp": 20.8, "hp_consistency": 57.6, "clutch_index": 53.76, "note": "Lower-order power hitter (68.7% IPL HP balls). Holds a 182.2 HP SR (+11.7 RAPP across 505 HP balls); \u0394RAPP is -1.5 only because his baseline SR (174.1) is already near-ceiling."}, {"name": "Andre Russell", "team2026": "Uncontracted / Intl", "status": "Retired / Inactive", "raw_balls_hp": 431, "ipl_share": 73.1, "sr_norm": 165.2, "sr_hp": 174.4, "rapp_hp": 2.9, "delta_rapp": 1.5, "bound_pct_hp": 27.0, "bpd_hp": 13.9, "hp_consistency": 58.6, "clutch_index": 53.27, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Dinesh Karthik", "team2026": "Uncontracted / Intl", "status": "Retired / Inactive", "raw_balls_hp": 357, "ipl_share": 77.6, "sr_norm": 161.1, "sr_hp": 173.4, "rapp_hp": 1.8, "delta_rapp": 3.5, "bound_pct_hp": 24.5, "bpd_hp": 16.4, "hp_consistency": 37.9, "clutch_index": 52.99, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Jitesh Sharma", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_balls_hp": 287, "ipl_share": 82.2, "sr_norm": 150.2, "sr_hp": 161.7, "rapp_hp": 1.5, "delta_rapp": 2.6, "bound_pct_hp": 21.8, "bpd_hp": 13.9, "hp_consistency": 68.0, "clutch_index": 52.74, "note": "Indian keeper-finisher (82.2% IPL HP balls). Delivers 68.0% innings consistency under pressure (161.7 HP SR across 287 HP balls) and adds domestic wicketkeeping depth."}, {"name": "Hardik Pandya", "team2026": "Mumbai Indians", "status": "Franchise Lock / Traded", "raw_balls_hp": 473, "ipl_share": 60.5, "sr_norm": 135.0, "sr_hp": 160.9, "rapp_hp": -0.1, "delta_rapp": 1.1, "bound_pct_hp": 22.8, "bpd_hp": 21.1, "hp_consistency": 46.9, "clutch_index": 52.63, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Dasun Shanaka", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_balls_hp": 444, "ipl_share": 6.1, "sr_norm": 125.1, "sr_hp": 149.0, "rapp_hp": -0.6, "delta_rapp": 4.3, "bound_pct_hp": 19.5, "bpd_hp": 16.9, "hp_consistency": 40.0, "clutch_index": 52.39, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Shivam Dube", "team2026": "Chennai Super Kings", "status": "Obtainable Target", "raw_balls_hp": 495, "ipl_share": 71.3, "sr_norm": 151.0, "sr_hp": 160.9, "rapp_hp": 0.4, "delta_rapp": 1.0, "bound_pct_hp": 21.7, "bpd_hp": 19.2, "hp_consistency": 48.4, "clutch_index": 52.22, "note": "Indian spin-hitter (71.3% IPL HP balls). Maintains a 160.9 HP SR (+7.6 \u0394RAPP across 495 HP balls); provides middle-overs boundary acceleration without using an overseas slot."}, {"name": "Tristan Stubbs", "team2026": "Delhi Capitals", "status": "Obtainable Target", "raw_balls_hp": 450, "ipl_share": 66.7, "sr_norm": 140.1, "sr_hp": 163.9, "rapp_hp": -0.1, "delta_rapp": 3.7, "bound_pct_hp": 20.9, "bpd_hp": 20.6, "hp_consistency": 41.7, "clutch_index": 51.92, "note": "Middle-order batter (66.7% IPL HP balls). Surges +22.1 \u0394RAPP under pressure (163.9 HP SR across 450 HP balls); ranked #8 due to a lower 41.7% innings consistency."}, {"name": "George Dockrell", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 237, "ipl_share": 0.0, "sr_norm": 131.9, "sr_hp": 140.7, "rapp_hp": 0.3, "delta_rapp": 6.1, "bound_pct_hp": 17.7, "bpd_hp": 16.4, "hp_consistency": 66.7, "clutch_index": 51.77, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Shreyas Iyer", "team2026": "Punjab Kings", "status": "Franchise Lock / Traded", "raw_balls_hp": 219, "ipl_share": 62.6, "sr_norm": 152.4, "sr_hp": 162.6, "rapp_hp": 1.1, "delta_rapp": 1.2, "bound_pct_hp": 19.6, "bpd_hp": 19.7, "hp_consistency": 43.8, "clutch_index": 51.58, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Daryl Mitchell", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 223, "ipl_share": 8.1, "sr_norm": 140.6, "sr_hp": 159.7, "rapp_hp": 2.8, "delta_rapp": 4.3, "bound_pct_hp": 19.8, "bpd_hp": 12.2, "hp_consistency": 55.6, "clutch_index": 51.48, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Rishabh Pant", "team2026": "Lucknow Super Giants", "status": "Franchise Lock / Traded", "raw_balls_hp": 164, "ipl_share": 96.3, "sr_norm": 141.2, "sr_hp": 157.2, "rapp_hp": 2.1, "delta_rapp": 3.1, "bound_pct_hp": 22.5, "bpd_hp": 10.4, "hp_consistency": 62.5, "clutch_index": 51.4, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Mohammad Nabi", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 273, "ipl_share": 6.2, "sr_norm": 118.0, "sr_hp": 146.4, "rapp_hp": 2.6, "delta_rapp": 5.5, "bound_pct_hp": 19.6, "bpd_hp": 12.7, "hp_consistency": 50.0, "clutch_index": 51.18, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "M Shahrukh Khan", "team2026": "Gujarat Titans", "status": "Obtainable Target", "raw_balls_hp": 208, "ipl_share": 100.0, "sr_norm": 140.1, "sr_hp": 163.0, "rapp_hp": -0.8, "delta_rapp": 5.7, "bound_pct_hp": 22.6, "bpd_hp": 13.0, "hp_consistency": 50.0, "clutch_index": 50.92, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Shimron Hetmyer", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_balls_hp": 524, "ipl_share": 69.3, "sr_norm": 146.6, "sr_hp": 157.6, "rapp_hp": 0.7, "delta_rapp": 2.8, "bound_pct_hp": 20.7, "bpd_hp": 15.2, "hp_consistency": 52.5, "clutch_index": 50.87, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Riyan Parag", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_balls_hp": 196, "ipl_share": 93.9, "sr_norm": 148.3, "sr_hp": 166.6, "rapp_hp": 0.9, "delta_rapp": 1.8, "bound_pct_hp": 21.4, "bpd_hp": 11.6, "hp_consistency": 42.9, "clutch_index": 50.84, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Heinrich Klaasen", "team2026": "Sunrisers Hyderabad", "status": "Obtainable Target", "raw_balls_hp": 375, "ipl_share": 85.1, "sr_norm": 168.7, "sr_hp": 162.6, "rapp_hp": 1.6, "delta_rapp": 0.6, "bound_pct_hp": 20.8, "bpd_hp": 14.6, "hp_consistency": 61.9, "clutch_index": 50.75, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Liam Livingstone", "team2026": "Sunrisers Hyderabad", "status": "Franchise Lock / Traded", "raw_balls_hp": 270, "ipl_share": 58.9, "sr_norm": 151.2, "sr_hp": 163.2, "rapp_hp": 1.5, "delta_rapp": 1.1, "bound_pct_hp": 22.1, "bpd_hp": 13.1, "hp_consistency": 50.0, "clutch_index": 50.32, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Ayush Badoni", "team2026": "Lucknow Super Giants", "status": "Obtainable Target", "raw_balls_hp": 346, "ipl_share": 93.1, "sr_norm": 132.6, "sr_hp": 155.2, "rapp_hp": -2.3, "delta_rapp": 2.4, "bound_pct_hp": 18.4, "bpd_hp": 17.1, "hp_consistency": 44.0, "clutch_index": 49.91, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Jaker Ali Anik", "team2026": "Uncontracted / Intl", "status": "Availability Risk (BAN)", "raw_balls_hp": 278, "ipl_share": 0.0, "sr_norm": 112.3, "sr_hp": 144.4, "rapp_hp": -2.3, "delta_rapp": 4.1, "bound_pct_hp": 16.4, "bpd_hp": 17.9, "hp_consistency": 35.3, "clutch_index": 49.84, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Ryan Burl", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 333, "ipl_share": 0.0, "sr_norm": 112.3, "sr_hp": 130.3, "rapp_hp": -1.1, "delta_rapp": 2.3, "bound_pct_hp": 14.7, "bpd_hp": 19.4, "hp_consistency": 50.0, "clutch_index": 49.8, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Dhruv Jurel", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_balls_hp": 249, "ipl_share": 98.4, "sr_norm": 146.4, "sr_hp": 163.3, "rapp_hp": -1.3, "delta_rapp": 1.4, "bound_pct_hp": 22.9, "bpd_hp": 13.2, "hp_consistency": 57.1, "clutch_index": 49.8, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Rinku Singh", "team2026": "Kolkata Knight Riders", "status": "Obtainable Target", "raw_balls_hp": 494, "ipl_share": 80.0, "sr_norm": 146.5, "sr_hp": 161.7, "rapp_hp": -0.8, "delta_rapp": 1.3, "bound_pct_hp": 23.0, "bpd_hp": 19.1, "hp_consistency": 31.4, "clutch_index": 48.57, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Aiden Markram", "team2026": "Lucknow Super Giants", "status": "Obtainable Target", "raw_balls_hp": 246, "ipl_share": 52.8, "sr_norm": 141.2, "sr_hp": 149.9, "rapp_hp": -1.5, "delta_rapp": -0.4, "bound_pct_hp": 19.1, "bpd_hp": 15.3, "hp_consistency": 46.2, "clutch_index": 48.37, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Rovman Powell", "team2026": "Kolkata Knight Riders", "status": "Obtainable Target", "raw_balls_hp": 613, "ipl_share": 27.6, "sr_norm": 146.5, "sr_hp": 146.7, "rapp_hp": -0.4, "delta_rapp": 0.6, "bound_pct_hp": 19.6, "bpd_hp": 15.7, "hp_consistency": 36.8, "clutch_index": 48.05, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Moeen Ali", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 227, "ipl_share": 42.7, "sr_norm": 136.3, "sr_hp": 153.2, "rapp_hp": -3.2, "delta_rapp": -1.0, "bound_pct_hp": 19.4, "bpd_hp": 11.1, "hp_consistency": 50.0, "clutch_index": 47.67, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Sherfane Rutherford", "team2026": "Mumbai Indians", "status": "Obtainable Target", "raw_balls_hp": 292, "ipl_share": 40.8, "sr_norm": 147.0, "sr_hp": 153.1, "rapp_hp": -2.3, "delta_rapp": 1.2, "bound_pct_hp": 21.6, "bpd_hp": 12.8, "hp_consistency": 25.0, "clutch_index": 47.29, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Washington Sundar", "team2026": "Gujarat Titans", "status": "Obtainable Target", "raw_balls_hp": 290, "ipl_share": 65.5, "sr_norm": 136.1, "sr_hp": 146.0, "rapp_hp": -3.7, "delta_rapp": 2.5, "bound_pct_hp": 19.2, "bpd_hp": 11.6, "hp_consistency": 35.0, "clutch_index": 46.44, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Azmatullah Omarzai", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_balls_hp": 284, "ipl_share": 19.0, "sr_norm": 136.3, "sr_hp": 135.2, "rapp_hp": -3.7, "delta_rapp": -1.3, "bound_pct_hp": 16.4, "bpd_hp": 14.5, "hp_consistency": 39.1, "clutch_index": 45.81, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Ravindra Jadeja", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_balls_hp": 507, "ipl_share": 89.3, "sr_norm": 127.4, "sr_hp": 142.1, "rapp_hp": -5.4, "delta_rapp": 1.5, "bound_pct_hp": 16.1, "bpd_hp": 20.4, "hp_consistency": 20.6, "clutch_index": 45.56, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Mitchell Santner", "team2026": "Mumbai Indians", "status": "Obtainable Target", "raw_balls_hp": 339, "ipl_share": 19.5, "sr_norm": 116.3, "sr_hp": 127.8, "rapp_hp": -10.3, "delta_rapp": 1.3, "bound_pct_hp": 16.2, "bpd_hp": 15.8, "hp_consistency": 34.8, "clutch_index": 45.5, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Axar Patel", "team2026": "Delhi Capitals", "status": "Obtainable Target", "raw_balls_hp": 640, "ipl_share": 51.9, "sr_norm": 137.1, "sr_hp": 138.6, "rapp_hp": -4.3, "delta_rapp": -1.1, "bound_pct_hp": 16.0, "bpd_hp": 14.0, "hp_consistency": 37.5, "clutch_index": 44.76, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Cameron Green", "team2026": "Kolkata Knight Riders", "status": "Obtainable Target", "raw_balls_hp": 163, "ipl_share": 68.7, "sr_norm": 155.9, "sr_hp": 136.6, "rapp_hp": -8.0, "delta_rapp": -7.7, "bound_pct_hp": 14.7, "bpd_hp": 14.9, "hp_consistency": 57.1, "clutch_index": 44.25, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Nehal Wadhera", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_balls_hp": 231, "ipl_share": 81.4, "sr_norm": 138.9, "sr_hp": 132.2, "rapp_hp": -10.2, "delta_rapp": -7.8, "bound_pct_hp": 18.4, "bpd_hp": 15.5, "hp_consistency": 41.7, "clutch_index": 42.07, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Kamindu Mendis", "team2026": "Sunrisers Hyderabad", "status": "Obtainable Target", "raw_balls_hp": 188, "ipl_share": 5.9, "sr_norm": 130.3, "sr_hp": 128.1, "rapp_hp": -9.3, "delta_rapp": -6.7, "bound_pct_hp": 13.8, "bpd_hp": 10.3, "hp_consistency": 37.5, "clutch_index": 41.65, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Sam Curran", "team2026": "Rajasthan Royals", "status": "Obtainable Target", "raw_balls_hp": 285, "ipl_share": 36.1, "sr_norm": 127.7, "sr_hp": 137.3, "rapp_hp": -8.9, "delta_rapp": -3.9, "bound_pct_hp": 14.9, "bpd_hp": 12.7, "hp_consistency": 26.3, "clutch_index": 41.54, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Salman Agha", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_balls_hp": 186, "ipl_share": 0.0, "sr_norm": 128.5, "sr_hp": 111.3, "rapp_hp": -15.0, "delta_rapp": -12.4, "bound_pct_hp": 11.8, "bpd_hp": 20.3, "hp_consistency": 30.0, "clutch_index": 40.09, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Roston Chase", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 155, "ipl_share": 0.0, "sr_norm": 120.2, "sr_hp": 120.0, "rapp_hp": -18.7, "delta_rapp": -10.9, "bound_pct_hp": 12.9, "bpd_hp": 13.9, "hp_consistency": 18.2, "clutch_index": 39.17, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Shamim Hossain", "team2026": "Uncontracted / Intl", "status": "Availability Risk (BAN)", "raw_balls_hp": 183, "ipl_share": 0.0, "sr_norm": 132.7, "sr_hp": 121.0, "rapp_hp": -16.0, "delta_rapp": -14.0, "bound_pct_hp": 15.1, "bpd_hp": 15.0, "hp_consistency": 42.9, "clutch_index": 38.87, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Deepak Hooda", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_balls_hp": 176, "ipl_share": 79.5, "sr_norm": 134.1, "sr_hp": 124.5, "rapp_hp": -17.4, "delta_rapp": -15.2, "bound_pct_hp": 13.5, "bpd_hp": 11.1, "hp_consistency": 30.8, "clutch_index": 36.52, "note": "Qualified batter benchmarked against phase-par run rates."}, {"name": "Krunal Pandya", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_balls_hp": 212, "ipl_share": 100.0, "sr_norm": 130.0, "sr_hp": 123.6, "rapp_hp": -20.7, "delta_rapp": -16.1, "bound_pct_hp": 14.6, "bpd_hp": 11.2, "hp_consistency": 11.1, "clutch_index": 33.59, "note": "Qualified batter benchmarked against phase-par run rates."}], "bowlers": [{"name": "Akeal Hosein", "team2026": "Chennai Super Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 175, "ipl_share": 17.1, "econ_norm": 8.11, "econ_hp": 5.26, "rspp_hp": 0.13, "delta_rspp": 0.12, "wkt_per_spell_hp": 2.2, "dot_pct_hp": 41.8, "hp_consistency": 88.2, "clutch_index": 67.57, "note": "Left-arm orthodox spinner (17.1% IPL HP balls). Holds a 5.26 HP economy (+3.22 RSPP, 88.2% spell consistency across 175 HP balls), pairing naturally with Ravi Bishnoi."}, {"name": "Sufiyan Muqeem", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 245, "ipl_share": 0.0, "econ_norm": 7.05, "econ_hp": 4.94, "rspp_hp": 0.09, "delta_rspp": 0.09, "wkt_per_spell_hp": 2.67, "dot_pct_hp": 60.0, "hp_consistency": 93.8, "clutch_index": 66.53, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Sunil Narine", "team2026": "Kolkata Knight Riders", "status": "Franchise Lock / Traded", "raw_legal_balls_hp": 347, "ipl_share": 100.0, "econ_norm": 7.25, "econ_hp": 5.55, "rspp_hp": 0.07, "delta_rspp": 0.06, "wkt_per_spell_hp": 1.73, "dot_pct_hp": 45.2, "hp_consistency": 96.3, "clutch_index": 62.97, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Jamie Overton", "team2026": "Chennai Super Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 186, "ipl_share": 36.0, "econ_norm": 9.51, "econ_hp": 7.43, "rspp_hp": 0.08, "delta_rspp": 0.09, "wkt_per_spell_hp": 2.15, "dot_pct_hp": 43.8, "hp_consistency": 88.2, "clutch_index": 62.51, "note": "Right-arm hit-the-deck pacer (36.0% IPL HP balls). Cuts economy by 2.08 RPO under pressure (7.43 HP Econ, +2.81 \u0394RSPP, 2.15 wkts/spell) and adds lower-order batting."}, {"name": "Abrar Ahmed", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 273, "ipl_share": 0.0, "econ_norm": 7.78, "econ_hp": 5.08, "rspp_hp": 0.07, "delta_rspp": 0.06, "wkt_per_spell_hp": 1.57, "dot_pct_hp": 50.5, "hp_consistency": 86.4, "clutch_index": 60.63, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Lungi Ngidi", "team2026": "Delhi Capitals", "status": "Obtainable Target", "raw_legal_balls_hp": 198, "ipl_share": 35.9, "econ_norm": 9.08, "econ_hp": 8.22, "rspp_hp": 0.07, "delta_rspp": 0.06, "wkt_per_spell_hp": 2.06, "dot_pct_hp": 37.7, "hp_consistency": 90.9, "clutch_index": 59.23, "note": "Right-arm seam bowler (35.9% IPL HP balls). Logs 90.9% spell consistency with 2.06 wkts/spell and +1.95 RSPP across 198 HP balls, offering hard-length cover for Jofra Archer."}, {"name": "Shaheen Afridi", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 253, "ipl_share": 0.0, "econ_norm": 8.24, "econ_hp": 7.61, "rspp_hp": 0.04, "delta_rspp": 0.04, "wkt_per_spell_hp": 2.67, "dot_pct_hp": 39.2, "hp_consistency": 83.9, "clutch_index": 58.59, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mohammad Nawaz", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 235, "ipl_share": 0.0, "econ_norm": 7.57, "econ_hp": 5.68, "rspp_hp": 0.05, "delta_rspp": 0.04, "wkt_per_spell_hp": 2.29, "dot_pct_hp": 44.9, "hp_consistency": 75.0, "clutch_index": 57.84, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Benjamin Sears", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 153, "ipl_share": 0.0, "econ_norm": 8.56, "econ_hp": 7.45, "rspp_hp": 0.06, "delta_rspp": 0.07, "wkt_per_spell_hp": 2.13, "dot_pct_hp": 40.2, "hp_consistency": 84.6, "clutch_index": 57.42, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Andre Russell", "team2026": "Uncontracted / Intl", "status": "Retired / Inactive", "raw_legal_balls_hp": 235, "ipl_share": 82.6, "econ_norm": 11.51, "econ_hp": 9.62, "rspp_hp": 0.02, "delta_rspp": 0.05, "wkt_per_spell_hp": 2.95, "dot_pct_hp": 39.8, "hp_consistency": 70.8, "clutch_index": 56.83, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Rasikh Salam", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_legal_balls_hp": 204, "ipl_share": 79.4, "econ_norm": 10.13, "econ_hp": 9.11, "rspp_hp": 0.03, "delta_rspp": 0.04, "wkt_per_spell_hp": 2.56, "dot_pct_hp": 35.0, "hp_consistency": 94.1, "clutch_index": 56.78, "note": "Indian death-overs pacer (79.4% IPL HP balls). Zero overseas slot cost; posts 94.1% spell consistency and 2.56 wkts/spell across 204 HP balls."}, {"name": "Jimmy Neesham", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 171, "ipl_share": 0.0, "econ_norm": 9.45, "econ_hp": 8.27, "rspp_hp": 0.04, "delta_rspp": 0.06, "wkt_per_spell_hp": 2.49, "dot_pct_hp": 41.9, "hp_consistency": 80.0, "clutch_index": 56.71, "note": "Left-arm-bat / right-arm medium all-rounder (0% IPL HP balls; 171 T20I HP balls). Takes 2.49 wkts/spell under pressure (+1.82 \u0394RSPP), though unproven in IPL death overs."}, {"name": "Jofra Archer", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_legal_balls_hp": 241, "ipl_share": 46.5, "econ_norm": 9.35, "econ_hp": 7.97, "rspp_hp": 0.05, "delta_rspp": 0.05, "wkt_per_spell_hp": 1.99, "dot_pct_hp": 43.0, "hp_consistency": 75.0, "clutch_index": 56.57, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Jasprit Bumrah", "team2026": "Mumbai Indians", "status": "Franchise Lock / Traded", "raw_legal_balls_hp": 494, "ipl_share": 62.1, "econ_norm": 7.32, "econ_hp": 7.12, "rspp_hp": 0.04, "delta_rspp": 0.03, "wkt_per_spell_hp": 1.8, "dot_pct_hp": 40.1, "hp_consistency": 87.2, "clutch_index": 56.56, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Umran Malik", "team2026": "Kolkata Knight Riders", "status": "Obtainable Target", "raw_legal_balls_hp": 167, "ipl_share": 60.5, "econ_norm": 10.46, "econ_hp": 8.33, "rspp_hp": 0.03, "delta_rspp": 0.06, "wkt_per_spell_hp": 2.31, "dot_pct_hp": 50.4, "hp_consistency": 80.0, "clutch_index": 56.05, "note": "High-pace Indian enforcer (60.5% IPL HP balls). Saves +2.59 \u0394RSPP over baseline (2.31 wkts/spell), though only 6 dataset balls came after 2023\u2014requires fitness verification."}, {"name": "Rahul Chahar", "team2026": "Chennai Super Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 215, "ipl_share": 90.2, "econ_norm": 8.55, "econ_hp": 7.23, "rspp_hp": 0.06, "delta_rspp": 0.06, "wkt_per_spell_hp": 1.41, "dot_pct_hp": 38.4, "hp_consistency": 70.6, "clutch_index": 55.81, "note": "Indian leg-spinner (90.2% IPL HP balls). Drops economy from 8.55 to 7.23 under pressure (+1.99 RSPP across 215 HP balls); domestic spin cover behind Bishnoi."}, {"name": "Washington Sundar", "team2026": "Gujarat Titans", "status": "Obtainable Target", "raw_legal_balls_hp": 211, "ipl_share": 25.6, "econ_norm": 8.5, "econ_hp": 7.44, "rspp_hp": 0.05, "delta_rspp": 0.05, "wkt_per_spell_hp": 1.78, "dot_pct_hp": 33.6, "hp_consistency": 70.0, "clutch_index": 55.12, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Varun Chakravarthy", "team2026": "Kolkata Knight Riders", "status": "Franchise Lock / Traded", "raw_legal_balls_hp": 664, "ipl_share": 55.0, "econ_norm": 8.38, "econ_hp": 7.3, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.94, "dot_pct_hp": 44.6, "hp_consistency": 88.7, "clutch_index": 54.93, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Prince Yadav", "team2026": "Lucknow Super Giants", "status": "Obtainable Target", "raw_legal_balls_hp": 158, "ipl_share": 62.0, "econ_norm": 9.25, "econ_hp": 8.99, "rspp_hp": 0.07, "delta_rspp": 0.06, "wkt_per_spell_hp": 1.03, "dot_pct_hp": 33.1, "hp_consistency": 81.2, "clutch_index": 54.77, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mustafizur Rahman", "team2026": "Kolkata Knight Riders", "status": "Availability Risk (BAN)", "raw_legal_balls_hp": 489, "ipl_share": 31.9, "econ_norm": 8.04, "econ_hp": 7.63, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.97, "dot_pct_hp": 44.9, "hp_consistency": 79.5, "clutch_index": 54.71, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mohit Sharma", "team2026": "Uncontracted / Intl", "status": "Retired / Inactive", "raw_legal_balls_hp": 277, "ipl_share": 100.0, "econ_norm": 10.08, "econ_hp": 9.05, "rspp_hp": 0.02, "delta_rspp": 0.03, "wkt_per_spell_hp": 2.25, "dot_pct_hp": 32.9, "hp_consistency": 76.2, "clutch_index": 53.99, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Michael Bracewell", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 177, "ipl_share": 11.3, "econ_norm": 8.46, "econ_hp": 6.67, "rspp_hp": 0.05, "delta_rspp": 0.05, "wkt_per_spell_hp": 1.22, "dot_pct_hp": 40.4, "hp_consistency": 70.0, "clutch_index": 53.86, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Shadab Khan", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 241, "ipl_share": 0.0, "econ_norm": 8.47, "econ_hp": 6.65, "rspp_hp": 0.03, "delta_rspp": 0.04, "wkt_per_spell_hp": 1.88, "dot_pct_hp": 37.5, "hp_consistency": 70.0, "clutch_index": 53.8, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Tim Southee", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 226, "ipl_share": 23.0, "econ_norm": 8.38, "econ_hp": 8.41, "rspp_hp": 0.03, "delta_rspp": 0.03, "wkt_per_spell_hp": 2.08, "dot_pct_hp": 34.7, "hp_consistency": 70.8, "clutch_index": 53.77, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Matheesha Pathirana", "team2026": "Kolkata Knight Riders", "status": "Obtainable Target", "raw_legal_balls_hp": 490, "ipl_share": 68.2, "econ_norm": 9.18, "econ_hp": 8.38, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 2.02, "dot_pct_hp": 39.5, "hp_consistency": 83.3, "clutch_index": 53.71, "note": "Right-arm sling death bowler (68.2% IPL HP balls). Takes 2.02 wkts/spell and saves +1.34 runs/over vs. phase-par across 490 HP balls; prime target if released by KKR."}, {"name": "Harshit Rana", "team2026": "Kolkata Knight Riders", "status": "Obtainable Target", "raw_legal_balls_hp": 245, "ipl_share": 74.7, "econ_norm": 9.91, "econ_hp": 8.66, "rspp_hp": 0.04, "delta_rspp": 0.05, "wkt_per_spell_hp": 1.55, "dot_pct_hp": 39.4, "hp_consistency": 72.7, "clutch_index": 53.7, "note": "Indian seam bowler (74.7% IPL HP balls). Improves by +2.27 \u0394RSPP under pressure (8.66 HP Econ, 1.55 wkts/spell across 245 HP balls); valuable if KKR opens trade/release talks."}, {"name": "Yash Dayal", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_legal_balls_hp": 189, "ipl_share": 100.0, "econ_norm": 9.79, "econ_hp": 8.92, "rspp_hp": 0.04, "delta_rspp": 0.04, "wkt_per_spell_hp": 1.78, "dot_pct_hp": 35.4, "hp_consistency": 72.7, "clutch_index": 53.66, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mitchell Santner", "team2026": "Mumbai Indians", "status": "Obtainable Target", "raw_legal_balls_hp": 450, "ipl_share": 27.1, "econ_norm": 7.75, "econ_hp": 6.69, "rspp_hp": 0.03, "delta_rspp": 0.03, "wkt_per_spell_hp": 1.27, "dot_pct_hp": 39.6, "hp_consistency": 88.6, "clutch_index": 53.3, "note": "Left-arm defensive spinner (27.1% IPL HP balls). Restricts scoring to 6.69 RPO across 450 HP balls (88.6% spell consistency), choking chases when RR defends."}, {"name": "Kuldeep Yadav", "team2026": "Delhi Capitals", "status": "Franchise Lock / Traded", "raw_legal_balls_hp": 524, "ipl_share": 68.7, "econ_norm": 8.27, "econ_hp": 7.5, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.81, "dot_pct_hp": 39.3, "hp_consistency": 82.2, "clutch_index": 53.22, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Cameron Green", "team2026": "Kolkata Knight Riders", "status": "Obtainable Target", "raw_legal_balls_hp": 167, "ipl_share": 67.1, "econ_norm": 9.9, "econ_hp": 8.49, "rspp_hp": 0.04, "delta_rspp": 0.05, "wkt_per_spell_hp": 1.44, "dot_pct_hp": 37.9, "hp_consistency": 78.9, "clutch_index": 53.07, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Rashid Khan", "team2026": "Gujarat Titans", "status": "Franchise Lock / Traded", "raw_legal_balls_hp": 786, "ipl_share": 53.9, "econ_norm": 7.54, "econ_hp": 7.49, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.85, "dot_pct_hp": 40.0, "hp_consistency": 91.8, "clutch_index": 52.7, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mahedi Hasan", "team2026": "Uncontracted / Intl", "status": "Availability Risk (BAN)", "raw_legal_balls_hp": 150, "ipl_share": 0.0, "econ_norm": 7.02, "econ_hp": 6.76, "rspp_hp": 0.04, "delta_rspp": 0.03, "wkt_per_spell_hp": 1.27, "dot_pct_hp": 43.7, "hp_consistency": 81.2, "clutch_index": 52.61, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Taskin Ahmed", "team2026": "Uncontracted / Intl", "status": "Availability Risk (BAN)", "raw_legal_balls_hp": 260, "ipl_share": 0.0, "econ_norm": 8.09, "econ_hp": 7.93, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 2.4, "dot_pct_hp": 43.2, "hp_consistency": 78.6, "clutch_index": 52.59, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Wanindu Hasaranga", "team2026": "Lucknow Super Giants", "status": "Obtainable Target", "raw_legal_balls_hp": 514, "ipl_share": 39.5, "econ_norm": 8.03, "econ_hp": 7.79, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.99, "dot_pct_hp": 38.9, "hp_consistency": 89.7, "clutch_index": 52.33, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Eshan Malinga", "team2026": "Sunrisers Hyderabad", "status": "Obtainable Target", "raw_legal_balls_hp": 280, "ipl_share": 54.3, "econ_norm": 9.45, "econ_hp": 8.63, "rspp_hp": 0.03, "delta_rspp": 0.03, "wkt_per_spell_hp": 1.66, "dot_pct_hp": 36.1, "hp_consistency": 77.3, "clutch_index": 52.0, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Suyash Sharma", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_legal_balls_hp": 255, "ipl_share": 89.0, "econ_norm": 9.14, "econ_hp": 7.83, "rspp_hp": 0.04, "delta_rspp": 0.04, "wkt_per_spell_hp": 1.05, "dot_pct_hp": 42.7, "hp_consistency": 72.2, "clutch_index": 51.99, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mayank Yadav", "team2026": "Lucknow Super Giants", "status": "Obtainable Target", "raw_legal_balls_hp": 156, "ipl_share": 33.3, "econ_norm": 9.83, "econ_hp": 8.61, "rspp_hp": 0.03, "delta_rspp": 0.03, "wkt_per_spell_hp": 1.38, "dot_pct_hp": 42.6, "hp_consistency": 76.9, "clutch_index": 51.67, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Shardul Thakur", "team2026": "Mumbai Indians", "status": "Obtainable Target", "raw_legal_balls_hp": 249, "ipl_share": 95.2, "econ_norm": 10.65, "econ_hp": 9.84, "rspp_hp": 0.01, "delta_rspp": 0.02, "wkt_per_spell_hp": 2.11, "dot_pct_hp": 34.6, "hp_consistency": 84.6, "clutch_index": 51.64, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Haris Rauf", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 291, "ipl_share": 0.0, "econ_norm": 8.58, "econ_hp": 8.99, "rspp_hp": 0.0, "delta_rspp": 0.0, "wkt_per_spell_hp": 2.54, "dot_pct_hp": 43.8, "hp_consistency": 74.2, "clutch_index": 51.62, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Kagiso Rabada", "team2026": "Gujarat Titans", "status": "Obtainable Target", "raw_legal_balls_hp": 243, "ipl_share": 70.0, "econ_norm": 9.25, "econ_hp": 9.43, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.74, "dot_pct_hp": 43.0, "hp_consistency": 73.1, "clutch_index": 51.41, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mujeeb Ur Rahman", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 160, "ipl_share": 0.0, "econ_norm": 6.91, "econ_hp": 7.54, "rspp_hp": 0.01, "delta_rspp": 0.0, "wkt_per_spell_hp": 2.01, "dot_pct_hp": 41.8, "hp_consistency": 86.7, "clutch_index": 51.33, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Nitish Reddy", "team2026": "Sunrisers Hyderabad", "status": "Obtainable Target", "raw_legal_balls_hp": 202, "ipl_share": 47.5, "econ_norm": 11.0, "econ_hp": 9.29, "rspp_hp": 0.01, "delta_rspp": 0.03, "wkt_per_spell_hp": 2.0, "dot_pct_hp": 30.9, "hp_consistency": 81.0, "clutch_index": 51.29, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Sikandar Raza", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 201, "ipl_share": 7.5, "econ_norm": 7.28, "econ_hp": 6.91, "rspp_hp": 0.03, "delta_rspp": 0.03, "wkt_per_spell_hp": 1.3, "dot_pct_hp": 37.7, "hp_consistency": 76.5, "clutch_index": 51.24, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Noor Ahmad", "team2026": "Chennai Super Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 440, "ipl_share": 59.5, "econ_norm": 8.19, "econ_hp": 7.75, "rspp_hp": 0.02, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.82, "dot_pct_hp": 40.5, "hp_consistency": 70.6, "clutch_index": 50.92, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Yuzvendra Chahal", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 622, "ipl_share": 73.8, "econ_norm": 8.76, "econ_hp": 8.38, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 2.08, "dot_pct_hp": 33.9, "hp_consistency": 73.1, "clutch_index": 50.75, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Saim Ayub", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 150, "ipl_share": 0.0, "econ_norm": 7.42, "econ_hp": 6.82, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.3, "dot_pct_hp": 37.3, "hp_consistency": 80.0, "clutch_index": 50.57, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "T Natarajan", "team2026": "Delhi Capitals", "status": "Franchise Lock / Traded", "raw_legal_balls_hp": 309, "ipl_share": 100.0, "econ_norm": 9.76, "econ_hp": 9.34, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.71, "dot_pct_hp": 31.7, "hp_consistency": 76.7, "clutch_index": 50.52, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Jacob Duffy", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_legal_balls_hp": 234, "ipl_share": 18.8, "econ_norm": 8.64, "econ_hp": 9.47, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.94, "dot_pct_hp": 43.4, "hp_consistency": 75.0, "clutch_index": 50.42, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Josh Hazlewood", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_legal_balls_hp": 435, "ipl_share": 64.8, "econ_norm": 8.09, "econ_hp": 8.9, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.85, "dot_pct_hp": 40.9, "hp_consistency": 79.1, "clutch_index": 50.39, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Krunal Pandya", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_legal_balls_hp": 213, "ipl_share": 100.0, "econ_norm": 7.77, "econ_hp": 8.03, "rspp_hp": 0.04, "delta_rspp": 0.03, "wkt_per_spell_hp": 1.13, "dot_pct_hp": 34.7, "hp_consistency": 63.6, "clutch_index": 50.3, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Yash Thakur", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 205, "ipl_share": 73.7, "econ_norm": 10.61, "econ_hp": 9.92, "rspp_hp": -0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 2.19, "dot_pct_hp": 38.4, "hp_consistency": 83.3, "clutch_index": 50.02, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mohammed Siraj", "team2026": "Gujarat Titans", "status": "Obtainable Target", "raw_legal_balls_hp": 386, "ipl_share": 92.5, "econ_norm": 8.77, "econ_hp": 9.2, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.66, "dot_pct_hp": 40.2, "hp_consistency": 78.0, "clutch_index": 49.87, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Ravindra Jadeja", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_legal_balls_hp": 336, "ipl_share": 83.6, "econ_norm": 8.03, "econ_hp": 7.61, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.36, "dot_pct_hp": 35.3, "hp_consistency": 78.6, "clutch_index": 49.87, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Prasidh Krishna", "team2026": "Gujarat Titans", "status": "Obtainable Target", "raw_legal_balls_hp": 341, "ipl_share": 82.1, "econ_norm": 9.1, "econ_hp": 9.07, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.69, "dot_pct_hp": 42.7, "hp_consistency": 68.8, "clutch_index": 49.69, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "FazalHaq Farooqi", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 251, "ipl_share": 12.4, "econ_norm": 8.25, "econ_hp": 8.54, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.3, "dot_pct_hp": 37.1, "hp_consistency": 72.4, "clutch_index": 49.34, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Maheesh Theekshana", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 516, "ipl_share": 45.0, "econ_norm": 7.85, "econ_hp": 7.66, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.17, "dot_pct_hp": 35.3, "hp_consistency": 81.0, "clutch_index": 49.29, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Dushmantha Chameera", "team2026": "Delhi Capitals", "status": "Obtainable Target", "raw_legal_balls_hp": 240, "ipl_share": 36.7, "econ_norm": 8.87, "econ_hp": 9.05, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.74, "dot_pct_hp": 38.8, "hp_consistency": 68.0, "clutch_index": 49.16, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Jason Holder", "team2026": "Gujarat Titans", "status": "Obtainable Target", "raw_legal_balls_hp": 534, "ipl_share": 46.8, "econ_norm": 8.86, "econ_hp": 9.43, "rspp_hp": 0.0, "delta_rspp": 0.0, "wkt_per_spell_hp": 2.16, "dot_pct_hp": 33.7, "hp_consistency": 71.9, "clutch_index": 49.03, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Keshav Maharaj", "team2026": "Mumbai Indians", "status": "Obtainable Target", "raw_legal_balls_hp": 152, "ipl_share": 15.8, "econ_norm": 8.92, "econ_hp": 8.2, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.26, "dot_pct_hp": 31.4, "hp_consistency": 75.0, "clutch_index": 48.99, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Lockie Ferguson", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 318, "ipl_share": 54.1, "econ_norm": 9.23, "econ_hp": 8.7, "rspp_hp": 0.02, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.33, "dot_pct_hp": 40.7, "hp_consistency": 69.0, "clutch_index": 48.9, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Ravichandran Ashwin", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 325, "ipl_share": 70.2, "econ_norm": 8.01, "econ_hp": 7.45, "rspp_hp": 0.03, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.04, "dot_pct_hp": 35.4, "hp_consistency": 66.7, "clutch_index": 48.78, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Adil Rashid", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 410, "ipl_share": 0.0, "econ_norm": 7.56, "econ_hp": 8.82, "rspp_hp": 0.0, "delta_rspp": -0.0, "wkt_per_spell_hp": 1.87, "dot_pct_hp": 39.3, "hp_consistency": 80.6, "clutch_index": 48.76, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Joshua Little", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 202, "ipl_share": 47.5, "econ_norm": 8.12, "econ_hp": 8.38, "rspp_hp": 0.03, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.01, "dot_pct_hp": 31.9, "hp_consistency": 68.2, "clutch_index": 48.62, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Adam Zampa", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 320, "ipl_share": 18.4, "econ_norm": 8.36, "econ_hp": 8.59, "rspp_hp": 0.01, "delta_rspp": 0.0, "wkt_per_spell_hp": 1.83, "dot_pct_hp": 32.8, "hp_consistency": 77.8, "clutch_index": 48.56, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Alzarri Joseph", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 219, "ipl_share": 32.4, "econ_norm": 9.6, "econ_hp": 10.3, "rspp_hp": 0.01, "delta_rspp": 0.02, "wkt_per_spell_hp": 1.42, "dot_pct_hp": 32.3, "hp_consistency": 69.2, "clutch_index": 48.29, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mitchell Starc", "team2026": "Delhi Capitals", "status": "Obtainable Target", "raw_legal_balls_hp": 189, "ipl_share": 73.5, "econ_norm": 9.79, "econ_hp": 10.6, "rspp_hp": -0.01, "delta_rspp": -0.01, "wkt_per_spell_hp": 2.79, "dot_pct_hp": 38.0, "hp_consistency": 56.5, "clutch_index": 48.07, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Arshdeep Singh", "team2026": "Punjab Kings", "status": "Franchise Lock / Traded", "raw_legal_balls_hp": 951, "ipl_share": 42.7, "econ_norm": 9.16, "econ_hp": 9.09, "rspp_hp": 0.0, "delta_rspp": 0.0, "wkt_per_spell_hp": 1.96, "dot_pct_hp": 35.6, "hp_consistency": 69.3, "clutch_index": 48.05, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Harshal Patel", "team2026": "Sunrisers Hyderabad", "status": "Obtainable Target", "raw_legal_balls_hp": 671, "ipl_share": 66.9, "econ_norm": 9.41, "econ_hp": 9.18, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.68, "dot_pct_hp": 36.5, "hp_consistency": 68.6, "clutch_index": 48.02, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mohammad Rishad Hossain", "team2026": "Uncontracted / Intl", "status": "Availability Risk (BAN)", "raw_legal_balls_hp": 326, "ipl_share": 0.0, "econ_norm": 8.95, "econ_hp": 7.63, "rspp_hp": -0.01, "delta_rspp": 0.0, "wkt_per_spell_hp": 1.62, "dot_pct_hp": 42.2, "hp_consistency": 77.3, "clutch_index": 47.85, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Nathan Ellis", "team2026": "Chennai Super Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 324, "ipl_share": 35.5, "econ_norm": 7.81, "econ_hp": 9.14, "rspp_hp": 0.01, "delta_rspp": -0.0, "wkt_per_spell_hp": 1.7, "dot_pct_hp": 36.0, "hp_consistency": 72.4, "clutch_index": 47.81, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Chris Jordan", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 215, "ipl_share": 37.7, "econ_norm": 10.25, "econ_hp": 9.3, "rspp_hp": 0.01, "delta_rspp": 0.03, "wkt_per_spell_hp": 0.86, "dot_pct_hp": 33.0, "hp_consistency": 72.2, "clutch_index": 46.87, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Patrick Cummins", "team2026": "Sunrisers Hyderabad", "status": "Obtainable Target", "raw_legal_balls_hp": 278, "ipl_share": 83.1, "econ_norm": 9.17, "econ_hp": 9.67, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.39, "dot_pct_hp": 30.7, "hp_consistency": 76.0, "clutch_index": 46.82, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Naveen ul Haq", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 289, "ipl_share": 55.4, "econ_norm": 8.68, "econ_hp": 9.34, "rspp_hp": 0.0, "delta_rspp": 0.0, "wkt_per_spell_hp": 1.5, "dot_pct_hp": 34.5, "hp_consistency": 70.8, "clutch_index": 46.7, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Bhuvneshwar Kumar", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_legal_balls_hp": 518, "ipl_share": 74.7, "econ_norm": 7.9, "econ_hp": 9.68, "rspp_hp": 0.01, "delta_rspp": 0.0, "wkt_per_spell_hp": 1.79, "dot_pct_hp": 32.7, "hp_consistency": 65.4, "clutch_index": 46.68, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mohammed Shami", "team2026": "Lucknow Super Giants", "status": "Obtainable Target", "raw_legal_balls_hp": 229, "ipl_share": 96.1, "econ_norm": 8.46, "econ_hp": 10.02, "rspp_hp": 0.0, "delta_rspp": -0.0, "wkt_per_spell_hp": 1.87, "dot_pct_hp": 34.9, "hp_consistency": 63.3, "clutch_index": 46.58, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Tanzim Sakib", "team2026": "Uncontracted / Intl", "status": "Availability Risk (BAN)", "raw_legal_balls_hp": 209, "ipl_share": 0.0, "econ_norm": 9.06, "econ_hp": 8.55, "rspp_hp": -0.01, "delta_rspp": 0.0, "wkt_per_spell_hp": 1.21, "dot_pct_hp": 38.4, "hp_consistency": 82.4, "clutch_index": 46.53, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Tushar Deshpande", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_legal_balls_hp": 271, "ipl_share": 96.7, "econ_norm": 9.63, "econ_hp": 10.94, "rspp_hp": -0.01, "delta_rspp": -0.01, "wkt_per_spell_hp": 2.12, "dot_pct_hp": 33.2, "hp_consistency": 82.1, "clutch_index": 46.44, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Marco Jansen", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 209, "ipl_share": 81.8, "econ_norm": 9.7, "econ_hp": 9.53, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.4, "dot_pct_hp": 33.8, "hp_consistency": 57.9, "clutch_index": 46.39, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Avesh Khan", "team2026": "Lucknow Super Giants", "status": "Obtainable Target", "raw_legal_balls_hp": 554, "ipl_share": 65.0, "econ_norm": 9.63, "econ_hp": 9.59, "rspp_hp": 0.0, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.54, "dot_pct_hp": 34.9, "hp_consistency": 69.1, "clutch_index": 46.11, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Naseem Shah", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 155, "ipl_share": 0.0, "econ_norm": 9.09, "econ_hp": 8.48, "rspp_hp": -0.01, "delta_rspp": 0.0, "wkt_per_spell_hp": 1.24, "dot_pct_hp": 38.1, "hp_consistency": 57.1, "clutch_index": 46.01, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Obed McCoy", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 224, "ipl_share": 35.3, "econ_norm": 9.09, "econ_hp": 10.28, "rspp_hp": -0.01, "delta_rspp": -0.0, "wkt_per_spell_hp": 2.0, "dot_pct_hp": 31.6, "hp_consistency": 60.9, "clutch_index": 45.95, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Axar Patel", "team2026": "Delhi Capitals", "status": "Obtainable Target", "raw_legal_balls_hp": 585, "ipl_share": 30.8, "econ_norm": 7.94, "econ_hp": 7.78, "rspp_hp": 0.01, "delta_rspp": 0.01, "wkt_per_spell_hp": 0.84, "dot_pct_hp": 38.3, "hp_consistency": 68.5, "clutch_index": 45.52, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mohammad Nabi", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 206, "ipl_share": 0.5, "econ_norm": 8.76, "econ_hp": 7.55, "rspp_hp": -0.0, "delta_rspp": 0.01, "wkt_per_spell_hp": 1.02, "dot_pct_hp": 35.0, "hp_consistency": 60.0, "clutch_index": 45.41, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Ravi Bishnoi", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_legal_balls_hp": 835, "ipl_share": 38.6, "econ_norm": 8.25, "econ_hp": 8.67, "rspp_hp": 0.0, "delta_rspp": -0.0, "wkt_per_spell_hp": 1.37, "dot_pct_hp": 38.7, "hp_consistency": 73.4, "clutch_index": 44.87, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Khaleel Ahmed", "team2026": "Chennai Super Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 217, "ipl_share": 94.5, "econ_norm": 8.62, "econ_hp": 10.63, "rspp_hp": -0.01, "delta_rspp": -0.02, "wkt_per_spell_hp": 1.75, "dot_pct_hp": 40.9, "hp_consistency": 65.4, "clutch_index": 44.69, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Trent Boult", "team2026": "Mumbai Indians", "status": "Obtainable Target", "raw_legal_balls_hp": 325, "ipl_share": 76.0, "econ_norm": 8.2, "econ_hp": 9.62, "rspp_hp": 0.01, "delta_rspp": 0.0, "wkt_per_spell_hp": 1.19, "dot_pct_hp": 30.4, "hp_consistency": 68.8, "clutch_index": 44.62, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Moeen Ali", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 205, "ipl_share": 55.1, "econ_norm": 7.93, "econ_hp": 8.8, "rspp_hp": -0.01, "delta_rspp": -0.02, "wkt_per_spell_hp": 1.31, "dot_pct_hp": 32.1, "hp_consistency": 68.2, "clutch_index": 44.37, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Barry McCarthy", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 177, "ipl_share": 0.0, "econ_norm": 8.44, "econ_hp": 9.33, "rspp_hp": -0.02, "delta_rspp": -0.02, "wkt_per_spell_hp": 1.46, "dot_pct_hp": 37.5, "hp_consistency": 55.6, "clutch_index": 44.16, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Ish Sodhi", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 368, "ipl_share": 0.0, "econ_norm": 8.34, "econ_hp": 9.13, "rspp_hp": -0.02, "delta_rspp": -0.02, "wkt_per_spell_hp": 1.55, "dot_pct_hp": 37.1, "hp_consistency": 78.6, "clutch_index": 43.98, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Romario Shepherd", "team2026": "Royal Challengers Bengaluru", "status": "Obtainable Target", "raw_legal_balls_hp": 374, "ipl_share": 29.4, "econ_norm": 10.48, "econ_hp": 10.66, "rspp_hp": -0.01, "delta_rspp": -0.01, "wkt_per_spell_hp": 1.74, "dot_pct_hp": 32.9, "hp_consistency": 65.0, "clutch_index": 43.49, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mukesh Kumar", "team2026": "Delhi Capitals", "status": "Obtainable Target", "raw_legal_balls_hp": 352, "ipl_share": 63.6, "econ_norm": 9.93, "econ_hp": 10.82, "rspp_hp": -0.01, "delta_rspp": -0.01, "wkt_per_spell_hp": 1.64, "dot_pct_hp": 32.1, "hp_consistency": 66.7, "clutch_index": 43.25, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Azmatullah Omarzai", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 230, "ipl_share": 33.5, "econ_norm": 8.56, "econ_hp": 9.63, "rspp_hp": -0.02, "delta_rspp": -0.02, "wkt_per_spell_hp": 1.7, "dot_pct_hp": 37.4, "hp_consistency": 51.7, "clutch_index": 43.16, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Abhishek Sharma", "team2026": "Sunrisers Hyderabad", "status": "Obtainable Target", "raw_legal_balls_hp": 202, "ipl_share": 34.2, "econ_norm": 9.29, "econ_hp": 8.7, "rspp_hp": -0.02, "delta_rspp": -0.0, "wkt_per_spell_hp": 1.08, "dot_pct_hp": 32.7, "hp_consistency": 54.5, "clutch_index": 42.76, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Hardik Pandya", "team2026": "Mumbai Indians", "status": "Franchise Lock / Traded", "raw_legal_balls_hp": 443, "ipl_share": 36.8, "econ_norm": 8.92, "econ_hp": 9.71, "rspp_hp": -0.01, "delta_rspp": -0.01, "wkt_per_spell_hp": 1.45, "dot_pct_hp": 34.6, "hp_consistency": 60.0, "clutch_index": 42.53, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Anrich Nortje", "team2026": "Lucknow Super Giants", "status": "Obtainable Target", "raw_legal_balls_hp": 216, "ipl_share": 85.6, "econ_norm": 10.21, "econ_hp": 10.67, "rspp_hp": -0.01, "delta_rspp": -0.0, "wkt_per_spell_hp": 0.89, "dot_pct_hp": 32.0, "hp_consistency": 55.0, "clutch_index": 41.77, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Vaibhav Arora", "team2026": "Kolkata Knight Riders", "status": "Obtainable Target", "raw_legal_balls_hp": 187, "ipl_share": 93.6, "econ_norm": 9.38, "econ_hp": 11.14, "rspp_hp": -0.02, "delta_rspp": -0.02, "wkt_per_spell_hp": 1.46, "dot_pct_hp": 31.8, "hp_consistency": 54.5, "clutch_index": 41.49, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Mark Adair", "team2026": "Uncontracted / Intl", "status": "Obtainable Target", "raw_legal_balls_hp": 213, "ipl_share": 0.0, "econ_norm": 8.1, "econ_hp": 10.97, "rspp_hp": -0.06, "delta_rspp": -0.07, "wkt_per_spell_hp": 2.37, "dot_pct_hp": 32.1, "hp_consistency": 76.0, "clutch_index": 41.18, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Sandeep Sharma", "team2026": "Rajasthan Royals", "status": "Current RR Squad", "raw_legal_balls_hp": 267, "ipl_share": 100.0, "econ_norm": 8.3, "econ_hp": 11.08, "rspp_hp": -0.01, "delta_rspp": -0.02, "wkt_per_spell_hp": 1.53, "dot_pct_hp": 24.0, "hp_consistency": 64.0, "clutch_index": 41.17, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Deepak Chahar", "team2026": "Mumbai Indians", "status": "Obtainable Target", "raw_legal_balls_hp": 167, "ipl_share": 58.1, "econ_norm": 8.85, "econ_hp": 10.35, "rspp_hp": -0.03, "delta_rspp": -0.03, "wkt_per_spell_hp": 1.16, "dot_pct_hp": 30.6, "hp_consistency": 63.2, "clutch_index": 41.01, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Sam Curran", "team2026": "Rajasthan Royals", "status": "Obtainable Target", "raw_legal_balls_hp": 325, "ipl_share": 30.8, "econ_norm": 9.28, "econ_hp": 11.04, "rspp_hp": -0.02, "delta_rspp": -0.02, "wkt_per_spell_hp": 1.63, "dot_pct_hp": 26.1, "hp_consistency": 66.7, "clutch_index": 40.94, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Marcus Stoinis", "team2026": "Punjab Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 204, "ipl_share": 42.2, "econ_norm": 9.36, "econ_hp": 11.09, "rspp_hp": -0.06, "delta_rspp": -0.05, "wkt_per_spell_hp": 2.32, "dot_pct_hp": 33.4, "hp_consistency": 62.5, "clutch_index": 40.63, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Shoriful Islam", "team2026": "Uncontracted / Intl", "status": "Availability Risk (BAN)", "raw_legal_balls_hp": 166, "ipl_share": 0.0, "econ_norm": 8.0, "econ_hp": 9.83, "rspp_hp": -0.04, "delta_rspp": -0.04, "wkt_per_spell_hp": 1.15, "dot_pct_hp": 34.8, "hp_consistency": 50.0, "clutch_index": 40.14, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Faheem Ashraf", "team2026": "Uncontracted / Intl", "status": "Ineligible (PAK)", "raw_legal_balls_hp": 160, "ipl_share": 0.0, "econ_norm": 7.81, "econ_hp": 9.75, "rspp_hp": -0.07, "delta_rspp": -0.07, "wkt_per_spell_hp": 1.17, "dot_pct_hp": 34.4, "hp_consistency": 41.2, "clutch_index": 36.86, "note": "Qualified bowler benchmarked against phase-par economy rates."}, {"name": "Shivam Dube", "team2026": "Chennai Super Kings", "status": "Obtainable Target", "raw_legal_balls_hp": 208, "ipl_share": 8.7, "econ_norm": 9.74, "econ_hp": 10.65, "rspp_hp": -0.07, "delta_rspp": -0.04, "wkt_per_spell_hp": 1.3, "dot_pct_hp": 30.1, "hp_consistency": 47.4, "clutch_index": 36.63, "note": "Qualified bowler benchmarked against phase-par economy rates."}]};
+let currentDisc = 'batters';
+let chartsInitialized = false;
+
+function switchTab(tab) {
+  ['rankings', 'visuals', 'simulator', 'methodology'].forEach(t => {
+    document.getElementById('view-' + t).classList.toggle('hidden', t !== tab);
+    const btn = document.getElementById('tab-' + t);
+    btn.className = (t === tab ? 'tab-active' : 'tab-inactive') + ' px-4 py-2 rounded-lg text-sm font-semibold border transition cursor-pointer';
+  });
+  if (tab === 'visuals' && !chartsInitialized) {
+    initCharts();
+    chartsInitialized = true;
+  }
+}
+
+function setDiscipline(d) {
+  currentDisc = d;
+  document.getElementById('btn-bat').className = d === 'batters'
+    ? 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-pink-600 text-white cursor-pointer'
+    : 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer';
+  document.getElementById('btn-bowl').className = d === 'bowlers'
+    ? 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white cursor-pointer'
+    : 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 cursor-pointer';
+  renderTable();
+}
+
+function renderTable() {
+  const poolMode = document.getElementById('poolFilter').value;
+  const minIpl = Number(document.getElementById('minIplSlider').value);
+  const query = document.getElementById('searchBox').value.trim().toLowerCase();
+
+  let list = DATA[currentDisc].filter(p => {
+    if (poolMode === 'obtainable' && p.status !== 'Obtainable Target') return false;
+    if (p.ipl_share < minIpl) return false;
+    if (query && !p.name.toLowerCase().includes(query) && !p.team2026.toLowerCase().includes(query)) return false;
+    return true;
+  });
+
+  document.getElementById('tableTitle').innerText =
+    (poolMode === 'obtainable' ? 'Obtainable RR Auction Targets: ' : 'All Qualified Players: ') +
+    (currentDisc === 'batters' ? 'Batters Ranked by Clutch Index' : 'Bowlers Ranked by Clutch Index');
+  document.getElementById('tableCount').innerText = `Showing ${list.length} players`;
+
+  const head = document.getElementById('tableHead');
+  const body = document.getElementById('tableBody');
+
+  if (currentDisc === 'batters') {
+    head.innerHTML = `
+      <tr>
+        <th class="py-3 px-3 text-center">Rank</th>
+        <th class="py-3 px-3">Player (2026 Squad)</th>
+        <th class="py-3 px-3">Status</th>
+        <th class="py-3 px-3 text-right">HP Balls</th>
+        <th class="py-3 px-3 text-right">IPL %</th>
+        <th class="py-3 px-3 text-right">Base SR</th>
+        <th class="py-3 px-3 text-right">HP SR</th>
+        <th class="py-3 px-3 text-right">HP RAPP</th>
+        <th class="py-3 px-3 text-right">Δ RAPP</th>
+        <th class="py-3 px-3 text-right">Balls/Out</th>
+        <th class="py-3 px-3 text-right">Cons %</th>
+        <th class="py-3 px-3 text-center">Clutch Index</th>
+        <th class="py-3 px-3">Scouting Fit Note</th>
+      </tr>`;
+    body.innerHTML = list.map((p, idx) => {
+      const isTop10 = poolMode === 'obtainable' && idx < 10 && minIpl === 0 && !query;
+      const badgeColor = p.status === 'Obtainable Target'
+        ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+        : 'bg-slate-800 text-slate-400 border-slate-700';
+      return `
+        <tr class="${isTop10 ? 'bg-pink-950/15' : ''} hover:bg-slate-800/50 transition">
+          <td class="py-2.5 px-3 text-center font-extrabold mono ${isTop10 ? 'text-pink-400' : 'text-slate-400'}">#${idx + 1}</td>
+          <td class="py-2.5 px-3"><div class="font-bold text-white">${p.name}</div><div class="text-[11px] text-slate-400">${p.team2026}</div></td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border ${badgeColor}">${p.status}</span></td>
+          <td class="py-2.5 px-3 text-right mono">${p.raw_balls_hp}</td>
+          <td class="py-2.5 px-3 text-right mono ${p.ipl_share === 0 ? 'text-amber-400' : 'text-slate-300'}">${p.ipl_share.toFixed(0)}%</td>
+          <td class="py-2.5 px-3 text-right mono text-slate-400">${p.sr_norm.toFixed(1)}</td>
+          <td class="py-2.5 px-3 text-right mono font-bold text-white">${p.sr_hp.toFixed(1)}</td>
+          <td class="py-2.5 px-3 text-right mono ${p.rapp_hp >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${p.rapp_hp >= 0 ? '+' : ''}${p.rapp_hp.toFixed(1)}</td>
+          <td class="py-2.5 px-3 text-right mono font-semibold ${p.delta_rapp >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${p.delta_rapp >= 0 ? '+' : ''}${p.delta_rapp.toFixed(1)}</td>
+          <td class="py-2.5 px-3 text-right mono">${p.bpd_hp.toFixed(1)}</td>
+          <td class="py-2.5 px-3 text-right mono">${p.hp_consistency.toFixed(1)}%</td>
+          <td class="py-2.5 px-3 text-center"><span class="px-2.5 py-1 rounded-md bg-pink-500/20 border border-pink-500/40 text-pink-200 font-extrabold mono">${p.clutch_index.toFixed(2)}</span></td>
+          <td class="py-2.5 px-3 text-[11px] text-slate-300 max-w-xs">${p.note}</td>
+        </tr>`;
+    }).join('');
+  } else {
+    head.innerHTML = `
+      <tr>
+        <th class="py-3 px-3 text-center">Rank</th>
+        <th class="py-3 px-3">Player (2026 Squad)</th>
+        <th class="py-3 px-3">Status</th>
+        <th class="py-3 px-3 text-right">HP Balls</th>
+        <th class="py-3 px-3 text-right">IPL %</th>
+        <th class="py-3 px-3 text-right">Base Econ</th>
+        <th class="py-3 px-3 text-right">HP Econ</th>
+        <th class="py-3 px-3 text-right">HP RSPP</th>
+        <th class="py-3 px-3 text-right">Δ RSPP</th>
+        <th class="py-3 px-3 text-right">Wkts/4Ov</th>
+        <th class="py-3 px-3 text-right">Cons %</th>
+        <th class="py-3 px-3 text-center">Clutch Index</th>
+        <th class="py-3 px-3">Scouting Fit Note</th>
+      </tr>`;
+    body.innerHTML = list.map((p, idx) => {
+      const isTop10 = poolMode === 'obtainable' && idx < 10 && minIpl === 0 && !query;
+      const badgeColor = p.status === 'Obtainable Target'
+        ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+        : 'bg-slate-800 text-slate-400 border-slate-700';
+      return `
+        <tr class="${isTop10 ? 'bg-blue-950/20' : ''} hover:bg-slate-800/50 transition">
+          <td class="py-2.5 px-3 text-center font-extrabold mono ${isTop10 ? 'text-blue-400' : 'text-slate-400'}">#${idx + 1}</td>
+          <td class="py-2.5 px-3"><div class="font-bold text-white">${p.name}</div><div class="text-[11px] text-slate-400">${p.team2026}</div></td>
+          <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold border ${badgeColor}">${p.status}</span></td>
+          <td class="py-2.5 px-3 text-right mono">${p.raw_legal_balls_hp}</td>
+          <td class="py-2.5 px-3 text-right mono ${p.ipl_share === 0 ? 'text-amber-400' : 'text-slate-300'}">${p.ipl_share.toFixed(0)}%</td>
+          <td class="py-2.5 px-3 text-right mono text-slate-400">${p.econ_norm.toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right mono font-bold text-white">${p.econ_hp.toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right mono ${p.rspp_hp >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${p.rspp_hp >= 0 ? '+' : ''}${p.rspp_hp.toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right mono font-semibold ${p.delta_rspp >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${p.delta_rspp >= 0 ? '+' : ''}${p.delta_rspp.toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right mono">${p.wkt_per_spell_hp.toFixed(2)}</td>
+          <td class="py-2.5 px-3 text-right mono">${p.hp_consistency.toFixed(1)}%</td>
+          <td class="py-2.5 px-3 text-center"><span class="px-2.5 py-1 rounded-md bg-blue-500/20 border border-blue-500/40 text-blue-200 font-extrabold mono">${p.clutch_index.toFixed(2)}</span></td>
+          <td class="py-2.5 px-3 text-[11px] text-slate-300 max-w-xs">${p.note}</td>
+        </tr>`;
+    }).join('');
+  }
+}
+
+function initCharts() {
+  const obtBat = DATA.batters.filter(p => p.status === 'Obtainable Target').slice(0, 10);
+  const otherBat = DATA.batters.filter(p => !obtBat.includes(p));
+
+  new Chart(document.getElementById('batScatterChart'), {
+    type: 'scatter',
+    data: {
+      datasets: [
+        {
+          label: 'Other Qualified Batters',
+          data: otherBat.map(p => ({ x: p.rapp_hp, y: p.delta_rapp, name: p.name })),
+          backgroundColor: 'rgba(148, 163, 184, 0.35)',
+          pointRadius: 5
+        },
+        {
+          label: 'Top 10 RR Targets',
+          data: obtBat.map((p, i) => ({ x: p.rapp_hp, y: p.delta_rapp, name: `#${i+1} ${p.name}` })),
+          backgroundColor: '#E11D48',
+          borderColor: '#FBCFE8',
+          borderWidth: 1.5,
+          pointRadius: 7
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#CBD5E1', font: { size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.raw.name}: RAPP ${ctx.raw.x}, ΔRAPP ${ctx.raw.y}`
+          }
+        }
+      },
+      scales: {
+        x: { title: { display: true, text: 'High-Pressure RAPP (/100 balls)', color: '#94A3B8' }, ticks: { color: '#94A3B8' }, grid: { color: '#1E293B' } },
+        y: { title: { display: true, text: 'Clutch Elevation vs Baseline (ΔRAPP)', color: '#94A3B8' }, ticks: { color: '#94A3B8' }, grid: { color: '#1E293B' } }
+      }
+    }
+  });
+
+  const obtBowl = DATA.bowlers.filter(p => p.status === 'Obtainable Target').slice(0, 10);
+  const otherBowl = DATA.bowlers.filter(p => !obtBowl.includes(p));
+
+  new Chart(document.getElementById('bowlScatterChart'), {
+    type: 'scatter',
+    data: {
+      datasets: [
+        {
+          label: 'Other Qualified Bowlers',
+          data: otherBowl.map(p => ({ x: p.rspp_hp, y: p.wkt_per_spell_hp, name: p.name })),
+          backgroundColor: 'rgba(148, 163, 184, 0.35)',
+          pointRadius: 5
+        },
+        {
+          label: 'Top 10 RR Targets',
+          data: obtBowl.map((p, i) => ({ x: p.rspp_hp, y: p.wkt_per_spell_hp, name: `#${i+1} ${p.name}` })),
+          backgroundColor: '#2563EB',
+          borderColor: '#93C5FD',
+          borderWidth: 1.5,
+          pointRadius: 7
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#CBD5E1', font: { size: 11 } } },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.raw.name}: RSPP +${ctx.raw.x}/ov, ${ctx.raw.y} wkts/4ov`
+          }
+        }
+      },
+      scales: {
+        x: { title: { display: true, text: 'High-Pressure Runs Saved vs Phase-Par (/ov)', color: '#94A3B8' }, ticks: { color: '#94A3B8' }, grid: { color: '#1E293B' } },
+        y: { title: { display: true, text: 'Wickets per 4-Over Spell (HP)', color: '#94A3B8' }, ticks: { color: '#94A3B8' }, grid: { color: '#1E293B' } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('piHistChart'), {
+    type: 'bar',
+    data: {
+      labels: DATA.piHistogram.labels,
+      datasets: [
+        { label: 'Innings 1 (Setting Target)', data: DATA.piHistogram.inn1, backgroundColor: 'rgba(59, 130, 246, 0.7)' },
+        { label: 'Innings 2 (Chasing)', data: DATA.piHistogram.inn2, backgroundColor: 'rgba(225, 29, 72, 0.7)' }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#CBD5E1', font: { size: 11 } } } },
+      scales: {
+        x: { ticks: { color: '#94A3B8', maxRotation: 45 }, grid: { display: false } },
+        y: { ticks: { color: '#94A3B8' }, grid: { color: '#1E293B' } }
+      }
+    }
+  });
+}
+
+function updateSim() {
+  let purse = 7.65;
+  let osSlots = 0;
+  let totSlots = 0;
+
+  if (document.getElementById('rel-milne').checked) { purse += 2.00; osSlots += 1; totSlots += 1; }
+  if (document.getElementById('rel-dom').checked) { purse += 2.40; totSlots += 4; }
+  if (document.getElementById('rel-curran').checked) { purse += 6.50; osSlots += 1; totSlots += 1; }
+  if (document.getElementById('rel-hetmyer').checked) { purse += 11.00; osSlots += 1; totSlots += 1; }
+
+  document.getElementById('sim-purse').innerText = `₹${purse.toFixed(2)} Cr`;
+  document.getElementById('sim-os').innerText = `${osSlots} Slot${osSlots === 1 ? '' : 's'}`;
+  document.getElementById('sim-tot').innerText = `${totSlots} Slot${totSlots === 1 ? '' : 's'}`;
+
+  let strat = '';
+  if (osSlots === 0) {
+    strat = `<strong>Zero Overseas Slots Open:</strong> RR cannot bid for overseas targets unless at least one overseas player is released. Focus strictly on Indian clutch targets: <strong>Shashank Singh (#6 Batter)</strong>, <strong>Rasikh Salam (#6 Bowler)</strong>, and <strong>Rahul Chahar (#8 Bowler)</strong>.`;
+  } else if (osSlots === 1 && purse < 16) {
+    strat = `<strong>Tight-Purse Single Overseas Strategy (₹${purse.toFixed(2)} Cr • 1 Overseas Slot):</strong> Use the single overseas slot on either <strong>Akeal Hosein (#1 Bowler, 5.26 HP Econ)</strong> paired with Indian finisher <strong>Shashank Singh (#6 Batter)</strong>, OR sign budget overseas finisher <strong>Sikandar Raza (#4 Batter, 63.2% consistency)</strong> alongside Indian death pacer <strong>Rasikh Salam (#6 Bowler)</strong>.`;
+  } else {
+    strat = `<strong>Expanded-Purse Dual-Upgrade Strategy (₹${purse.toFixed(2)} Cr • ${osSlots} Overseas Slots):</strong> RR has enough purse and overseas slots to bid aggressively for <strong>David Miller (#1 Batter, +40.2 ΔRAPP)</strong> to lock down overs 15–20, while adding <strong>Jamie Overton (#2 Bowler)</strong> or <strong>Matheesha Pathirana (#3 Bowler)</strong> to partner Jofra Archer at the death.`;
+  }
+  document.getElementById('sim-strategy').innerHTML = strat;
+}
+
+renderTable();
+updateSim();
+</script>
+</body>
+</html>
